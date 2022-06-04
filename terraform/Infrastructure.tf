@@ -29,3 +29,12 @@ module "app-asg" {
   vpc_zone_identifier = module.networking.public_subnets_id
   vpc_id              = module.networking.vpc_id
 }
+
+# Variables used in mysql-db module #
+module "mysql-db" {
+  source = "./modules/mysql-db"
+
+  region              = var.region
+  vpc_private_subnet_ids = module.networking.private_subnets_id
+  vpc_id = module.networking.vpc_id
+}

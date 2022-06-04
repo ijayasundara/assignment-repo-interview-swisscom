@@ -20,6 +20,7 @@ resource "aws_security_group" "instance" {
 
 ## Creating Launch Configuration
 resource "aws_launch_configuration" "swisscom-assignment" {
+  name            = "swisscom-app-launch-configuration"
   image_id        = lookup(var.amis, var.region)
   instance_type   = "t2.micro"
   security_groups = ["${aws_security_group.instance.id}"]
@@ -36,6 +37,7 @@ resource "aws_launch_configuration" "swisscom-assignment" {
 
 ## Creating AutoScaling Group
 resource "aws_autoscaling_group" "swisscom-assignment" {
+  name                 = "swisscom-app-autoscaling-group"
   launch_configuration = aws_launch_configuration.swisscom-assignment.id
   vpc_zone_identifier  = var.vpc_zone_identifier
   min_size             = 2
