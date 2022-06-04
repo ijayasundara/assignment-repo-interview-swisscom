@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "rds-private-subnet" {
-  name = "rds-private-subnet-group"
+  name       = "rds-private-subnet-group"
   subnet_ids = var.vpc_private_subnet_ids
 }
 
@@ -16,7 +16,7 @@ resource "aws_security_group" "db" {
   }
 }
 
-resource "aws_db_instance" "my_test_mysql" {
+resource "aws_db_instance" "swisscomdb" {
   allocated_storage           = 1
   storage_type                = "gp2"
   engine                      = "mysql"
@@ -26,7 +26,7 @@ resource "aws_db_instance" "my_test_mysql" {
   username                    = "swisscom_db_user"
   password                    = "Dzaunk3cwxw"
   parameter_group_name        = "default.mysql8.0.28"
-  db_subnet_group_name        = "${aws_db_subnet_group.rds-private-subnet.name}"
+  db_subnet_group_name        = aws_db_subnet_group.rds-private-subnet.name
   vpc_security_group_ids      = ["${aws_security_group.db.id}"]
   allow_major_version_upgrade = false
   auto_minor_version_upgrade  = true

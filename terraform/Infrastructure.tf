@@ -34,7 +34,7 @@ module "app-asg" {
 module "mysql-db" {
   source = "./modules/mysql-db"
 
-  region              = var.region
+  region                 = var.region
   vpc_private_subnet_ids = module.networking.private_subnets_id
-  vpc_id = module.networking.vpc_id
+  vpc_id                 = module.networking.vpc_id
 }
