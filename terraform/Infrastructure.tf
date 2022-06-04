@@ -25,4 +25,6 @@ module "app-asg" {
   region               = "${var.region}"
   public_key_path      = "${var.public_key_path}"
   key_name             = "${var.key_name}"
+  vpc_zone_identifier  = module.networking.public_subnets_id
+  vpc_id               = module.networking.vpc_id
 }

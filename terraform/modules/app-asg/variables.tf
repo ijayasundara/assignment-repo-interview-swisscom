@@ -19,3 +19,12 @@ variable "amis" {
   eu-west-1 = "ami-0551bf2a5bb48bc5c"
   }
 }
+
+variable "vpc_zone_identifier" {
+    type = list
+}
+
+variable "vpc_id" {
+  type = string
+}
+

@@ -1,8 +1,11 @@
+
+
 data "aws_availability_zones" "all" {}
 
 ### Creating Security Group for EC2
 resource "aws_security_group" "instance" {
   name = "swisscom-assignment-instance"
+  vpc_id = var.vpc_id
   ingress {
     from_port = 8080
     to_port = 8080
@@ -34,9 +37,9 @@ resource "aws_launch_configuration" "swisscom-assignment" {
 ## Creating AutoScaling Group
 resource "aws_autoscaling_group" "swisscom-assignment" {
   launch_configuration = "${aws_launch_configuration.swisscom-assignment.id}"
-  availability_zones = "${data.aws_availability_zones.all.names}"
+  vpc_zone_identifier  = var.vpc_zone_identifier
   min_size = 2
-  max_size = 10
+  max_size = 3
   load_balancers = ["${aws_elb.swisscom-assignment.name}"]
   health_check_type = "ELB"
   tag {
@@ -47,7 +50,8 @@ resource "aws_autoscaling_group" "swisscom-assignment" {
 }
 ## Security Group for ELB
 resource "aws_security_group" "elb" {
-  name = "swisscom-assignment"
+  name = "swisscom-assignment-elb"
+  vpc_id = var.vpc_id
   egress {
     from_port = 0
     to_port = 0
@@ -66,7 +70,7 @@ resource "aws_security_group" "elb" {
 resource "aws_elb" "swisscom-assignment" {
   name = "swisscom-assignment"
   security_groups = ["${aws_security_group.elb.id}"]
-  availability_zones = "${data.aws_availability_zones.all.names}"
+  subnets         = var.vpc_zone_identifier
   health_check {
     healthy_threshold = 2
     unhealthy_threshold = 2
