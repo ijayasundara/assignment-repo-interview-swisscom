@@ -1,9 +1,10 @@
+# Creating aws db subnet group #
 resource "aws_db_subnet_group" "rds-private-subnet" {
   name       = "rds-private-subnet-group"
   subnet_ids = var.vpc_private_subnet_ids
 }
 
-### Creating Security Group for EC2
+# Creating Security Group for EC2 #
 resource "aws_security_group" "db" {
   name   = "swisscom-assignment-db-security-group"
   vpc_id = var.vpc_id
@@ -16,23 +17,23 @@ resource "aws_security_group" "db" {
   }
 }
 
+# Creating RDS instance #
 resource "aws_db_instance" "swisscomdb" {
-  allocated_storage           = 1
-  storage_type                = "gp2"
-  engine                      = "mysql"
-  engine_version              = "8.0.28"
-  instance_class              = "db.t2.micro"
-  db_name                     = "swisscomdb"
-  username                    = "swisscom_db_user"
-  password                    = "Dzaunk3cwxw"
-  parameter_group_name        = "default.mysql8.0.28"
+  storage_type                = var.storage_type
+  engine                      = var.engine
+  engine_version              = var.engine_version
+  instance_class              = var.instance_class
+  db_name                     = var.db_name
+  username                    = var.username
+  password                    = var.password
+  parameter_group_name        = var.parameter_group_name
   db_subnet_group_name        = aws_db_subnet_group.rds-private-subnet.name
   vpc_security_group_ids      = ["${aws_security_group.db.id}"]
-  allow_major_version_upgrade = false
-  auto_minor_version_upgrade  = true
-  backup_retention_period     = 35
-  backup_window               = "22:00-23:00"
-  maintenance_window          = "Sat:00:00-Sat:03:00"
-  multi_az                    = true
-  skip_final_snapshot         = true
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+  auto_minor_version_upgrade  = var.auto_minor_version_upgrade
+  backup_retention_period     = var.backup_retention_period
+  backup_window               = var.backup_window
+  maintenance_window          = var.maintenance_window
+  multi_az                    = var.multi_az
+  skip_final_snapshot         = var.skip_final_snapshot
 }

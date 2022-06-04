@@ -34,7 +34,23 @@ module "app-asg" {
 module "mysql-db" {
   source = "./modules/mysql-db"
 
-  region                 = var.region
-  vpc_private_subnet_ids = module.networking.private_subnets_id
-  vpc_id                 = module.networking.vpc_id
+  region                      = var.region
+  vpc_private_subnet_ids      = module.networking.private_subnets_id
+  vpc_id                      = module.networking.vpc_id
+  allocated_storage           = var.allocated_storage
+  storage_type                = var.storage_type
+  engine                      = var.engine
+  engine_version              = var.engine_version
+  instance_class              = var.instance_class
+  db_name                     = var.db_name
+  username                    = var.username
+  password                    = var.password
+  parameter_group_name        = var.parameter_group_name
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+  auto_minor_version_upgrade  = var.auto_minor_version_upgrade
+  backup_retention_period     = var.backup_retention_period
+  backup_window               = var.backup_window
+  maintenance_window          = var.maintenance_window
+  multi_az                    = var.multi_az
+  skip_final_snapshot         = var.skip_final_snapshot
 }
