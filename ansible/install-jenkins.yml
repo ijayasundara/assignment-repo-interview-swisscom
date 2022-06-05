@@ -10,8 +10,8 @@
       apt_repository: repo='ppa:openjdk-r/ppa'
 
     # Installing Java
-    - name: Install Java 11
-      apt: pkg=openjdk-11-jdk
+    - name: Install Java 8
+      apt: pkg=openjdk-8-jdk
       become: yes
 
     # Downloading Jenkins repository
