@@ -14,7 +14,7 @@ amis            = "ami-0551bf2a5bb48bc5c"
 
 # module mysql-db #
 
-allocated_storage           = "5"
+allocated_storage           = 5
 storage_type                = "gp2"
 engine                      = "mysql"
 engine_version              = "8.0.28"

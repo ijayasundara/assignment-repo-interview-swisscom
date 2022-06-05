@@ -4,7 +4,7 @@ resource "aws_db_subnet_group" "rds-private-subnet" {
   subnet_ids = var.vpc_private_subnet_ids
 }
 
-# Creating Security Group for EC2 #
+# Creating Security Group for RDS #
 resource "aws_security_group" "db" {
   name   = "swisscom-assignment-db-security-group"
   vpc_id = var.vpc_id
@@ -19,6 +19,7 @@ resource "aws_security_group" "db" {
 
 # Creating RDS instance #
 resource "aws_db_instance" "swisscomdb" {
+  allocated_storage           = var.allocated_storage
   storage_type                = var.storage_type
   engine                      = var.engine
   engine_version              = var.engine_version

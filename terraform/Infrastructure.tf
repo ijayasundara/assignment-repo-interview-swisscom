@@ -19,6 +19,18 @@ module "networking" {
   availability_zones   = local.production_availability_zones
 }
 
+# Variables used in bastion server #
+
+module "bastion-server" {
+  source = "./modules/bastion-server"
+
+  region    = var.region
+  vpc_id    = module.networking.vpc_id
+  key_name  = var.key_name
+  subnet_id = module.networking.public_subnet_id
+}
+
+
 # Variables used in app-asg module #
 module "app-asg" {
   source = "./modules/app-asg"
