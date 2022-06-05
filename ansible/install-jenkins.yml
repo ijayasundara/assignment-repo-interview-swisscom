@@ -15,18 +15,19 @@
       become: yes
 
     # Downloading Jenkins repository
-    - name: Add jenkins.io key
-      apt_key:
-        url: "https://pkg.jenkins.io/debian/jenkins.io.key  "
-        state: present
+    - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
 
     #Adding jenkins to source list
-    - apt_repository:
-      repo: deb http://pkg.jenkins.io/debian-stable binary/
-      state: present
+    - name: ensure the repository is configured
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
+
     # Installing jenkins
-    - name: installing jenkins
-      apt: pkg=jenkins state=installed update_cache=true
+    - name: ensure jenkins is installed
+      apt: name=jenkins update_cache=yes
+      become: yes
 
     # allowing Port 8080
     - name: Allow port 8080
