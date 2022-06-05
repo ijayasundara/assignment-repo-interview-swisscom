@@ -5,17 +5,37 @@
   become_user: root
 
   tasks:
-    - name: ensure the jenkins apt repository key is installed
-      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+    # Adding Java repository for Java
+    - name: Add Java Repo
+      apt_repository: repo='ppa:openjdk-r/ppa'
+
+    # Installing Java
+    - name: Install Java 11
+      apt: pkg=openjdk-11-jdk
       become: yes
 
-    - name: ensure the repository is configured
-      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
-      become: yes
+    # Downloading Jenkins repository
+    - name: Add jenkins.io key
+      apt_key:
+        url: "https://pkg.jenkins.io/debian/jenkins.io.key  "
+        state: present
 
-    - name: ensure jenkins is installed
-      apt: name=jenkins update_cache=yes
-      become: yes
+    #Adding jenkins to source list
+    - apt_repository:
+      repo: deb http://pkg.jenkins.io/debian-stable binary/
+      state: present
+    # Installing jenkins
+    - name: installing jenkins
+        apt: pkg=jenkins state=installed update_cache=true
 
-    - name: ensure jenkins is running
-      service: name=jenkins state=started
+    # allowing Port 8080
+    - name: Allow port 8080
+      shell: iptables -I INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+    # start the jenkins server
+    - name: start jenkins service
+      service:
+        name: jenkins
+        state: running
+        enabled: yes
+      register: svc_status
