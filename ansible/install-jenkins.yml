@@ -37,6 +37,6 @@
     - name: start jenkins service
       service:
         name: jenkins
-        state: running
+        state: started
         enabled: yes
       register: svc_status
