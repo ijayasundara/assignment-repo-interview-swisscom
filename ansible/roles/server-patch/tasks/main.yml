@@ -5,9 +5,22 @@
     apt:
       update_cache: yes
 
+# Hold the critical apps to prevent unattended upgrades #
+  - name: prevent update of java
+    dpkg_selections:
+      name: java
+      selection: hold
+  - name: prevent update of npm
+    dpkg_selections:
+      name: npm
+      selection: hold
+  - name: prevent update of httpd
+    dpkg_selections:
+      name: httpd
+      selection: hold
+
 # Upgrade all packages except JAVA,HTTPD & NPM #
   - name: Upgrade all packages exluding JAVA,HTTPD & NPM
     apt:
       name: '*'
-      exclude: java*,httpd*,npm*
       state: latest

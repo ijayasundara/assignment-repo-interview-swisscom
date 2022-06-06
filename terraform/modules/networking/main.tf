@@ -10,7 +10,7 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-## Public and private subnets creation ##
+# Public and private subnets creation #
 
 # Internet gateway for the public subnet creation #
 resource "aws_internet_gateway" "ig" {

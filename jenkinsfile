@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  tools {nodejs "node"}
+
+  stages {
+
+# Get code from git #
+    stage('Git') {
+      steps {
+        git 'https://github.com/ijayasundara/assignment-repo-interview-swisscom.git/apidemoapp/'
+      }
+    }
+
+# Build using NPM #
+    stage('Build') {
+      steps {
+        sh 'npm install'
+         sh '<<Build Command>>'
+      }
+    }
+
+# Test the code using NPM #
+    stage('Test') {
+      steps {
+        sh 'node test'
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 data "aws_availability_zones" "all" {}
 
-### Creating Security Group for EC2
+# Creating Security Group for EC2 #
 resource "aws_security_group" "instance" {
   name   = "swisscom-assignment-instance"
   vpc_id = var.vpc_id
@@ -24,7 +24,7 @@ resource "aws_security_group" "instance" {
   }
 }
 
-## Creating Launch Configuration
+# Creating Launch Configuration #
 resource "aws_launch_configuration" "swisscom-assignment" {
   name            = "swisscom-app-launch-configuration"
   image_id        = lookup(var.amis, var.region)
@@ -46,7 +46,7 @@ resource "aws_launch_configuration" "swisscom-assignment" {
   }
 }
 
-## Creating AutoScaling Group
+# Creating AutoScaling Group #
 resource "aws_autoscaling_group" "swisscom-assignment" {
   name                 = "swisscom-app-autoscaling-group"
   launch_configuration = aws_launch_configuration.swisscom-assignment.id
@@ -62,7 +62,7 @@ resource "aws_autoscaling_group" "swisscom-assignment" {
   }
 }
 
-## Security Group for ELB
+# Security Group for ELB #
 resource "aws_security_group" "elb" {
   name   = "swisscom-assignment-elb"
   vpc_id = var.vpc_id

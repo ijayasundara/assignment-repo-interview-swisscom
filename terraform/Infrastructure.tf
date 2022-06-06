@@ -20,7 +20,6 @@ module "networking" {
 }
 
 # Variables used in bastion server #
-
 module "bastion-server" {
   source = "./modules/bastion-server"
 
