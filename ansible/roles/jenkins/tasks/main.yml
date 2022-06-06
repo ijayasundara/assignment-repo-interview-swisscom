@@ -1,0 +1,37 @@
+---
+# tasks file for jenkins #
+# Add repository to java #
+- name: add java repo
+  apt_repository: repo='ppa:openjdk-r/ppa'
+
+# install java 8 #
+- name: install Java 8
+  apt: pkg=openjdk-8-jdk
+  become: yes
+
+# Add jenkins repository key #
+- name: ensure the jenkins apt repository key is installed
+  apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+  become: yes
+
+# add jenkins repository #
+- name: ensure the repository is configured
+  apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+  become: yes
+
+# Install jenkins #
+- name: ensure jenkins is installed
+  apt: name=jenkins update_cache=yes
+  become: yes
+
+# Allow port 8080 #
+- name: allow port 8080
+  shell: iptables -I INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Start jenkins server #
+- name: start jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+  register: svc_status

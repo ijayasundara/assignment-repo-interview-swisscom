@@ -5,8 +5,8 @@ resource "aws_security_group" "instance" {
   name   = "swisscom-assignment-instance"
   vpc_id = var.vpc_id
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -14,6 +14,12 @@ resource "aws_security_group" "instance" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -24,11 +30,16 @@ resource "aws_launch_configuration" "swisscom-assignment" {
   image_id        = lookup(var.amis, var.region)
   instance_type   = "t2.micro"
   security_groups = ["${aws_security_group.instance.id}"]
+  associate_public_ip_address = true
   key_name        = var.key_name
   user_data       = <<-EOF
               #!/bin/bash
-              echo "Hello, World" > index.html
-              nohup busybox httpd -f -p 8080 &
+              sudo apt update
+              sudo apt install -y npm
+              sudo apt install git
+              sudo git clone https://github.com/ijayasundara/assignment-repo-interview-swisscom.git
+              cd /assignment-repo-interview-swisscom/apidemoapp
+              nohup sudo npm start &
               EOF
   lifecycle {
     create_before_destroy = true
@@ -67,6 +78,12 @@ resource "aws_security_group" "elb" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 # Creating ELB #
@@ -79,12 +96,12 @@ resource "aws_elb" "swisscom-assignment" {
     unhealthy_threshold = 2
     timeout             = 3
     interval            = 30
-    target              = "HTTP:8080/"
+    target              = "HTTP:3000/"
   }
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "8080"
+    instance_port     = "3000"
     instance_protocol = "http"
   }
 }

@@ -1,0 +1,9 @@
+---
+- hosts: bastion-server
+  become: yes
+  remote_user: ubuntu
+  become_user: root
+
+  roles:
+    - server-patch
+    - jenkins

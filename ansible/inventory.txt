@@ -1,0 +1,8 @@
+[bastion-server]
+54.216.183.25
+
+[app-servers]
+
+
+[all]
+54.216.183.25

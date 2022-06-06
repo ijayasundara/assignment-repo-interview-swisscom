@@ -1,0 +1,13 @@
+---
+# tasks file for server-patch #
+# Update apt cache #
+  - name: Update cache
+    apt:
+      update_cache: yes
+
+# Upgrade all packages except JAVA,HTTPD & NPM #
+  - name: Upgrade all packages exluding JAVA,HTTPD & NPM
+    apt:
+      name: '*'
+      exclude: java*,httpd*,npm*
+      state: latest

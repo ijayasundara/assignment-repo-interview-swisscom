@@ -1,0 +1,40 @@
+---
+# tasks file for app-upgrade #
+# Update apt cache #
+  - name: update cache
+    apt:
+      update_cache: yes
+
+# Install/update NPM to latest version #
+  - name: update latest NPM
+    apt:
+      name: npm
+      state: latest
+
+# Update git to latest version #
+  - name: update latest git
+    apt:
+      name: git
+      state: latest
+
+# Clone git repository #
+  - name: git clone repo
+    git:
+      repo: "https://example.com/repo"
+      dest: ~/user/repo
+      clone: yes
+      update: yes
+
+# Get website process ID #
+  - name: get running processes
+    shell: "ps -ef | grep -v grep | grep -w npm | awk '{print $2}'"
+    register: running_processes
+
+# Stop website#
+  - name: kill running processes
+    shell: "kill -9 {{ item }}"
+    with_items: "{{ running_processes.stdout_lines }}"
+
+# Start website #
+  - name: start app
+    shell: "cd /assignment-repo-interview-swisscom/apidemoapp; nohup sudo npm start &"
