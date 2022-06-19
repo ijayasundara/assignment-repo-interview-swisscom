@@ -20,7 +20,7 @@
 # Clone git repository #
   - name: git clone repo
     git:
-      repo: "https://example.com/repo"
+      repo: "https://github.com/ijayasundara/assignment-repo-interview-swisscom.git"
       dest: ~/user/repo
       clone: yes
       update: yes
